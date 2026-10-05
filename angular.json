@@ -43,6 +43,9 @@
             "development": { "buildTarget": "pizza-pan-calculator:build:development" }
           },
           "defaultConfiguration": "development"
+        },
+        "deploy": {
+          "builder": "angular-cli-ghpages:deploy"
         }
       }
     }
