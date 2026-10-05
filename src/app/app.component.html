@@ -1,0 +1,804 @@
+<div class="min-h-screen bg-slate-50">
+
+  <!-- ========================================= -->
+  <!-- HEADER -->
+  <!-- ========================================= -->
+
+  <header class="bg-slate-950 text-white shadow-lg">
+
+    <div class="mx-auto max-w-5xl px-4 py-6 sm:px-6">
+
+      <div class="flex items-start justify-between gap-4">
+
+        <div>
+
+          <p
+            class="text-sm font-semibold uppercase tracking-widest text-amber-400"
+          >
+            Pizza Production
+          </p>
+
+          <h1
+            class="mt-1 text-2xl font-bold sm:text-3xl"
+          >
+            Pizza Pan Calculator
+          </h1>
+
+          <p
+            class="mt-1 max-w-2xl text-sm text-slate-300"
+          >
+            Check whether your current pans have enough total dough
+            capacity for the next batch.
+          </p>
+
+        </div>
+
+
+        <!-- Reset -->
+
+        <button
+          type="button"
+          (click)="reset()"
+          class="rounded-lg border border-slate-700 px-3 py-2 text-sm font-medium text-slate-200 transition hover:bg-slate-800"
+        >
+          Reset
+        </button>
+
+      </div>
+
+    </div>
+
+  </header>
+
+
+
+  <!-- ========================================= -->
+  <!-- MAIN -->
+  <!-- ========================================= -->
+
+  <main
+    class="mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-8"
+  >
+
+
+    <!-- ======================================= -->
+    <!-- INPUT SECTIONS -->
+    <!-- ======================================= -->
+
+    <div class="grid gap-6 lg:grid-cols-2">
+
+
+      <!-- ===================================== -->
+      <!-- BATCH & DOUGH WEIGHTS -->
+      <!-- ===================================== -->
+
+      <section
+        class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200 sm:p-6"
+      >
+
+        <div class="mb-5">
+
+          <h2
+            class="text-lg font-bold text-slate-900"
+          >
+            1. Batch & dough weights
+          </h2>
+
+          <p
+            class="mt-1 text-sm text-slate-500"
+          >
+            Change these values if the recipe or dough-ball
+            weights change.
+          </p>
+
+        </div>
+
+
+        <!-- Batch size -->
+
+        <label class="mb-5 block">
+
+          <span
+            class="mb-2 block text-sm font-semibold text-slate-700"
+          >
+            New dough mixture
+          </span>
+
+
+          <div class="relative">
+
+            <input
+              type="number"
+              min="0"
+              step="0.1"
+              [(ngModel)]="batchKg"
+              class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 pr-14 text-lg font-semibold outline-none transition focus:border-amber-500 focus:ring-4 focus:ring-amber-100"
+            />
+
+
+            <span
+              class="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-medium text-slate-500"
+            >
+              kg
+            </span>
+
+          </div>
+
+        </label>
+
+
+
+        <!-- Dough types -->
+
+        <div class="space-y-3">
+
+          <div
+            *ngFor="let item of doughTypes; trackBy: trackByKey"
+            class="flex items-center gap-3 rounded-xl border border-slate-200 p-3"
+          >
+
+            <div class="min-w-0 flex-1">
+
+              <p
+                class="font-semibold text-slate-800"
+              >
+                {{ item.label }}
+              </p>
+
+              <p
+                class="text-xs text-slate-500"
+              >
+                Dough ball weight
+              </p>
+
+            </div>
+
+
+            <div class="relative w-32">
+
+              <input
+                type="number"
+                min="1"
+                step="1"
+                [(ngModel)]="dough[item.key].weight"
+                class="w-full rounded-lg border border-slate-300 px-3 py-2 pr-9 text-right font-semibold outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-100"
+              />
+
+
+              <span
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400"
+              >
+                g
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- ===================================== -->
+      <!-- CURRENT PANS -->
+      <!-- ===================================== -->
+
+      <section
+        class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200 sm:p-6"
+      >
+
+        <div class="mb-5">
+
+          <h2
+            class="text-lg font-bold text-slate-900"
+          >
+            2. Current pans
+          </h2>
+
+          <p
+            class="mt-1 text-sm text-slate-500"
+          >
+            Enter how many pans are currently available
+            for each dough type.
+          </p>
+
+        </div>
+
+
+
+        <!-- Pan inputs -->
+
+        <div class="grid grid-cols-2 gap-3">
+
+          <label
+            *ngFor="let item of doughTypes; trackBy: trackByKey"
+            class="rounded-xl border border-slate-200 p-3"
+          >
+
+            <span
+              class="mb-2 block text-sm font-semibold text-slate-700"
+            >
+              {{ item.label }}
+            </span>
+
+
+            <input
+              type="number"
+              min="0"
+              step="1"
+              [(ngModel)]="pans[item.key]"
+              class="w-full rounded-lg border border-slate-300 px-3 py-2 text-lg font-bold outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-100"
+            />
+
+          </label>
+
+        </div>
+
+
+
+        <!-- Total pans -->
+
+        <div
+          class="mt-4 flex items-center justify-between rounded-xl bg-slate-100 px-4 py-3"
+        >
+
+          <span
+            class="text-sm font-semibold text-slate-600"
+          >
+            Total available pans
+          </span>
+
+
+          <span
+            class="text-xl font-extrabold text-slate-900"
+          >
+            {{ totalPans }}
+          </span>
+
+        </div>
+
+
+
+        <!-- Explanation -->
+
+        <div
+          class="mt-3 rounded-xl border border-blue-100 bg-blue-50 p-3"
+        >
+
+          <p
+            class="text-xs leading-5 text-blue-800"
+          >
+            Each pan type has a different dough capacity.
+            The calculator uses the actual pan count and dough
+            weight for each type instead of treating every pan
+            as the same size.
+          </p>
+
+        </div>
+
+      </section>
+
+    </div>
+
+
+
+    <!-- ======================================= -->
+    <!-- CALCULATE -->
+    <!-- ======================================= -->
+
+    <section
+      class="mt-6 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200 sm:p-6"
+    >
+
+      <div class="mb-4">
+
+        <h2
+          class="text-lg font-bold text-slate-900"
+        >
+          3. Check the new batch
+        </h2>
+
+        <p
+          class="mt-1 text-sm text-slate-500"
+        >
+          The calculator will add the capacity of all your
+          available pans and compare it with the new dough batch.
+        </p>
+
+      </div>
+
+
+      <button
+        type="button"
+        (click)="calculate()"
+        class="w-full rounded-xl bg-amber-500 px-5 py-4 text-base font-extrabold text-slate-950 shadow-sm transition hover:bg-amber-400 active:scale-[0.99] sm:text-lg"
+      >
+        Calculate New Batch
+      </button>
+
+    </section>
+
+
+
+    <!-- ======================================= -->
+    <!-- RESULTS -->
+    <!-- ======================================= -->
+
+    <section
+      *ngIf="calculated"
+      class="mt-6 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200 sm:p-6"
+    >
+
+
+      <!-- ===================================== -->
+      <!-- WARNING -->
+      <!-- ===================================== -->
+
+      <div
+        *ngIf="warning"
+        class="rounded-xl border border-red-200 bg-red-50 p-4 text-red-800"
+      >
+
+        <p class="font-bold">
+          Cannot calculate
+        </p>
+
+        <p class="mt-1 text-sm">
+          {{ warning }}
+        </p>
+
+      </div>
+
+
+
+      <ng-container *ngIf="!warning">
+
+
+        <!-- =================================== -->
+        <!-- MAIN DECISION -->
+        <!-- =================================== -->
+
+        <div
+          class="rounded-2xl p-5"
+          [ngClass]="
+            enough
+              ? 'bg-emerald-50 ring-1 ring-emerald-200'
+              : 'bg-red-50 ring-1 ring-red-200'
+          "
+        >
+
+          <div
+            class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+          >
+
+            <div>
+
+              <p
+                class="text-sm font-bold uppercase tracking-wide"
+                [ngClass]="
+                  enough
+                    ? 'text-emerald-700'
+                    : 'text-red-700'
+                "
+              >
+                Batch decision
+              </p>
+
+
+              <h2
+                class="mt-1 text-2xl font-black sm:text-3xl"
+                [ngClass]="
+                  enough
+                    ? 'text-emerald-900'
+                    : 'text-red-900'
+                "
+              >
+                {{
+                  enough
+                    ? 'YES — ENOUGH PANS'
+                    : 'NO — NOT ENOUGH PANS'
+                }}
+              </h2>
+
+
+              <p
+                class="mt-2 text-sm"
+                [ngClass]="
+                  enough
+                    ? 'text-emerald-800'
+                    : 'text-red-800'
+                "
+              >
+
+                Batch required:
+                <strong>
+                  {{ batchKg | number:'1.0-2' }} kg
+                </strong>
+
+                <br />
+
+                Current pan capacity:
+                <strong>
+                  {{ totalPanCapacityKg | number:'1.0-2' }} kg
+                </strong>
+
+              </p>
+
+            </div>
+
+
+
+            <!-- Difference -->
+
+            <div class="text-left sm:text-right">
+
+              <p
+                class="text-xs font-semibold uppercase tracking-wide text-slate-500"
+              >
+                {{
+                  enough
+                    ? 'Extra capacity'
+                    : 'Capacity short'
+                }}
+              </p>
+
+
+              <p
+                class="text-2xl font-black"
+                [ngClass]="
+                  enough
+                    ? 'text-emerald-700'
+                    : 'text-red-700'
+                "
+              >
+
+                {{
+                  (
+                    enough
+                      ? capacityDifferenceKg
+                      : -capacityDifferenceKg
+                  ) | number:'1.0-2'
+                }}
+
+                kg
+
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- =================================== -->
+        <!-- CAPACITY SUMMARY -->
+        <!-- =================================== -->
+
+        <div
+          class="mt-5 grid gap-3 sm:grid-cols-3"
+        >
+
+
+          <!-- Batch -->
+
+          <div
+            class="rounded-xl bg-slate-100 p-4"
+          >
+
+            <p
+              class="text-xs font-semibold uppercase tracking-wide text-slate-500"
+            >
+              New batch
+            </p>
+
+
+            <p
+              class="mt-1 text-2xl font-black text-slate-900"
+            >
+              {{ batchKg | number:'1.0-2' }} kg
+            </p>
+
+          </div>
+
+
+
+          <!-- Capacity -->
+
+          <div
+            class="rounded-xl bg-slate-100 p-4"
+          >
+
+            <p
+              class="text-xs font-semibold uppercase tracking-wide text-slate-500"
+            >
+              Pan capacity
+            </p>
+
+
+            <p
+              class="mt-1 text-2xl font-black text-slate-900"
+            >
+              {{ totalPanCapacityKg | number:'1.0-2' }} kg
+            </p>
+
+          </div>
+
+
+
+          <!-- Pans -->
+
+          <div
+            class="rounded-xl bg-slate-100 p-4"
+          >
+
+            <p
+              class="text-xs font-semibold uppercase tracking-wide text-slate-500"
+            >
+              Total pans
+            </p>
+
+
+            <p
+              class="mt-1 text-2xl font-black text-slate-900"
+            >
+              {{ totalPans }}
+            </p>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- =================================== -->
+        <!-- BREAKDOWN -->
+        <!-- =================================== -->
+
+        <div class="mt-6">
+
+          <div class="mb-3">
+
+            <h3
+              class="text-base font-bold text-slate-900"
+            >
+              Pan capacity breakdown
+            </h3>
+
+            <p
+              class="mt-1 text-sm text-slate-500"
+            >
+              Capacity is calculated from the pans currently available.
+            </p>
+
+          </div>
+
+
+
+          <div
+            class="overflow-hidden rounded-xl border border-slate-200"
+          >
+
+            <!-- Table header -->
+
+            <div
+              class="grid grid-cols-4 bg-slate-100 px-4 py-3 text-xs font-bold uppercase tracking-wide text-slate-500"
+            >
+
+              <span>
+                Dough type
+              </span>
+
+              <span class="text-right">
+                Pans
+              </span>
+
+              <span class="text-right">
+                Dough / pan
+              </span>
+
+              <span class="text-right">
+                Capacity
+              </span>
+
+            </div>
+
+
+
+            <!-- Table rows -->
+
+            <div
+              *ngFor="let row of result"
+              class="grid grid-cols-4 border-t border-slate-100 px-4 py-4 text-sm"
+            >
+
+              <span
+                class="font-semibold text-slate-800"
+              >
+                {{ row.label }}
+              </span>
+
+
+              <span
+                class="text-right font-bold text-slate-900"
+              >
+                {{ row.pans }}
+              </span>
+
+
+              <span
+                class="text-right text-slate-500"
+              >
+                {{ row.doughPerPan }} g
+              </span>
+
+
+              <span
+                class="text-right font-bold text-slate-700"
+              >
+                {{ row.capacityKg | number:'1.0-2' }} kg
+              </span>
+
+            </div>
+
+
+
+            <!-- Total -->
+
+            <div
+              class="grid grid-cols-4 border-t-2 border-slate-200 bg-slate-50 px-4 py-4 text-sm font-extrabold"
+            >
+
+              <span>
+                Total
+              </span>
+
+
+              <span class="text-right">
+                {{ totalPans }}
+              </span>
+
+
+              <span></span>
+
+
+              <span class="text-right">
+                {{ totalPanCapacityKg | number:'1.0-2' }} kg
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- =================================== -->
+        <!-- HOW CALCULATION WORKS -->
+        <!-- =================================== -->
+
+        <div
+          class="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-4"
+        >
+
+          <h3
+            class="font-bold text-slate-800"
+          >
+            Calculation
+          </h3>
+
+
+          <div
+            class="mt-2 space-y-1 text-sm text-slate-600"
+          >
+
+            <p>
+              Classic:
+              {{ pans.classic }}
+              ×
+              {{ dough.classic.weight }}g
+              =
+              {{
+                pans.classic * dough.classic.weight
+              }}g
+            </p>
+
+
+            <p>
+              Mini:
+              {{ pans.mini }}
+              ×
+              {{ dough.mini.weight }}g
+              =
+              {{
+                pans.mini * dough.mini.weight
+              }}g
+            </p>
+
+
+            <p>
+              XL:
+              {{ pans.xl }}
+              ×
+              {{ dough.xl.weight }}g
+              =
+              {{
+                pans.xl * dough.xl.weight
+              }}g
+            </p>
+
+
+            <p>
+              Cheesy Crust:
+              {{ pans.cheesy }}
+              ×
+              {{ dough.cheesy.weight }}g
+              =
+              {{
+                pans.cheesy * dough.cheesy.weight
+              }}g
+            </p>
+
+
+            <p>
+              Deep:
+              {{ pans.deep }}
+              ×
+              {{ dough.deep.weight }}g
+              =
+              {{
+                pans.deep * dough.deep.weight
+              }}g
+            </p>
+
+          </div>
+
+
+          <div
+            class="mt-3 border-t border-slate-200 pt-3"
+          >
+
+            <p
+              class="font-bold text-slate-900"
+            >
+              Total pan capacity:
+              {{ totalPanCapacityKg | number:'1.0-2' }} kg
+            </p>
+
+
+            <p
+              class="mt-1 text-sm text-slate-600"
+            >
+              Required for new batch:
+              {{ batchKg | number:'1.0-2' }} kg
+            </p>
+
+          </div>
+
+        </div>
+
+
+      </ng-container>
+
+    </section>
+
+
+
+    <!-- ======================================= -->
+    <!-- FOOTER -->
+    <!-- ======================================= -->
+
+    <p
+      class="mt-6 text-center text-xs text-slate-400"
+    >
+      Runs entirely in your browser • Angular + Tailwind
+      • No API • No database
+    </p>
+
+  </main>
+
+</div>
