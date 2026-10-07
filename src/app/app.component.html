@@ -1,19 +1,19 @@
 <div class="min-h-screen bg-slate-50">
 
   <!-- ========================================= -->
-  <!-- HEADERr -->
+  <!-- HEADER -->
   <!-- ========================================= -->
 
   <header class="bg-slate-950 text-white shadow-lg">
 
-    <div class="mx-auto max-w-5xl px-4 py-6 sm:px-6">
+    <div class="mx-auto max-w-5xl px-4 py-5 sm:px-6 sm:py-6">
 
-      <div class="flex items-start justify-between gap-4">
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
 
-        <div>
+        <div class="min-w-0">
 
           <p
-            class="text-sm font-semibold uppercase tracking-widest text-amber-400"
+            class="text-xs font-semibold uppercase tracking-widest text-amber-400 sm:text-sm"
           >
             Pizza Production
           </p>
@@ -25,7 +25,7 @@
           </h1>
 
           <p
-            class="mt-1 max-w-2xl text-sm text-slate-300"
+            class="mt-1 max-w-2xl text-sm leading-5 text-slate-300"
           >
             Check whether your current pans have enough total dough
             capacity for the next batch.
@@ -39,7 +39,7 @@
         <button
           type="button"
           (click)="reset()"
-          class="rounded-lg border border-slate-700 px-3 py-2 text-sm font-medium text-slate-200 transition hover:bg-slate-800"
+          class="w-full rounded-lg border border-slate-700 px-3 py-2 text-sm font-medium text-slate-200 transition hover:bg-slate-800 sm:w-auto"
         >
           Reset
         </button>
@@ -51,13 +51,12 @@
   </header>
 
 
-
   <!-- ========================================= -->
   <!-- MAIN -->
   <!-- ========================================= -->
 
   <main
-    class="mx-auto max-w-5xl px-4 py-6 sm:px-6 sm:py-8"
+    class="mx-auto max-w-5xl px-4 py-5 sm:px-6 sm:py-8"
   >
 
 
@@ -65,7 +64,7 @@
     <!-- INPUT SECTIONS -->
     <!-- ======================================= -->
 
-    <div class="grid gap-6 lg:grid-cols-2">
+    <div class="grid gap-5 lg:grid-cols-2">
 
 
       <!-- ===================================== -->
@@ -73,7 +72,7 @@
       <!-- ===================================== -->
 
       <section
-        class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200 sm:p-6"
+        class="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200 sm:p-6"
       >
 
         <div class="mb-5">
@@ -85,7 +84,7 @@
           </h2>
 
           <p
-            class="mt-1 text-sm text-slate-500"
+            class="mt-1 text-sm leading-5 text-slate-500"
           >
             Change these values if the recipe or dough-ball
             weights change.
@@ -112,6 +111,7 @@
               min="0"
               step="0.1"
               [(ngModel)]="batchKg"
+              (focus)="$any($event.target).select()"
               class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 pr-14 text-lg font-semibold outline-none transition focus:border-amber-500 focus:ring-4 focus:ring-amber-100"
             />
 
@@ -154,13 +154,14 @@
             </div>
 
 
-            <div class="relative w-32">
+            <div class="relative w-28 shrink-0 sm:w-32">
 
               <input
                 type="number"
                 min="1"
                 step="1"
                 [(ngModel)]="dough[item.key].weight"
+                (focus)="$any($event.target).select()"
                 class="w-full rounded-lg border border-slate-300 px-3 py-2 pr-9 text-right font-semibold outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-100"
               />
 
@@ -186,7 +187,7 @@
       <!-- ===================================== -->
 
       <section
-        class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200 sm:p-6"
+        class="rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200 sm:p-6"
       >
 
         <div class="mb-5">
@@ -198,7 +199,7 @@
           </h2>
 
           <p
-            class="mt-1 text-sm text-slate-500"
+            class="mt-1 text-sm leading-5 text-slate-500"
           >
             Enter how many pans are currently available
             for each dough type.
@@ -210,7 +211,7 @@
 
         <!-- Pan inputs -->
 
-        <div class="grid grid-cols-2 gap-3">
+        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
 
           <label
             *ngFor="let item of doughTypes; trackBy: trackByKey"
@@ -229,6 +230,7 @@
               min="0"
               step="1"
               [(ngModel)]="pans[item.key]"
+              (focus)="$any($event.target).select()"
               class="w-full rounded-lg border border-slate-300 px-3 py-2 text-lg font-bold outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-100"
             />
 
@@ -241,7 +243,7 @@
         <!-- Total pans -->
 
         <div
-          class="mt-4 flex items-center justify-between rounded-xl bg-slate-100 px-4 py-3"
+          class="mt-4 flex items-center justify-between gap-3 rounded-xl bg-slate-100 px-4 py-3"
         >
 
           <span
@@ -278,47 +280,31 @@
 
         </div>
 
+
+
+        <!-- Calculate button -->
+
+        <div class="mt-4">
+
+          <button
+            type="button"
+            (click)="calculate()"
+            class="w-full rounded-xl bg-amber-500 px-5 py-3.5 text-base font-extrabold text-slate-950 shadow-sm transition hover:bg-amber-400 active:scale-[0.99] sm:py-4 sm:text-lg"
+          >
+            Calculate New Batch
+          </button>
+
+          <p
+            class="mt-2 text-center text-xs text-slate-400"
+          >
+            Check whether the current pans can handle the new batch.
+          </p>
+
+        </div>
+
       </section>
 
     </div>
-
-
-
-    <!-- ======================================= -->
-    <!-- CALCULATE -->
-    <!-- ======================================= -->
-
-    <section
-      class="mt-6 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200 sm:p-6"
-    >
-
-      <div class="mb-4">
-
-        <h2
-          class="text-lg font-bold text-slate-900"
-        >
-          3. Check the new batch
-        </h2>
-
-        <p
-          class="mt-1 text-sm text-slate-500"
-        >
-          The calculator will add the capacity of all your
-          available pans and compare it with the new dough batch.
-        </p>
-
-      </div>
-
-
-      <button
-        type="button"
-        (click)="calculate()"
-        class="w-full rounded-xl bg-amber-500 px-5 py-4 text-base font-extrabold text-slate-950 shadow-sm transition hover:bg-amber-400 active:scale-[0.99] sm:text-lg"
-      >
-        Calculate New Batch
-      </button>
-
-    </section>
 
 
 
@@ -328,7 +314,7 @@
 
     <section
       *ngIf="calculated"
-      class="mt-6 rounded-2xl bg-white p-5 shadow-sm ring-1 ring-slate-200 sm:p-6"
+      class="mt-5 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-slate-200 sm:mt-6 sm:p-6"
     >
 
 
@@ -361,7 +347,7 @@
         <!-- =================================== -->
 
         <div
-          class="rounded-2xl p-5"
+          class="rounded-2xl p-4 sm:p-5"
           [ngClass]="
             enough
               ? 'bg-emerald-50 ring-1 ring-emerald-200'
@@ -373,7 +359,7 @@
             class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
           >
 
-            <div>
+            <div class="min-w-0">
 
               <p
                 class="text-sm font-bold uppercase tracking-wide"
@@ -388,7 +374,7 @@
 
 
               <h2
-                class="mt-1 text-2xl font-black sm:text-3xl"
+                class="mt-1 text-2xl font-black leading-tight sm:text-3xl"
                 [ngClass]="
                   enough
                     ? 'text-emerald-900'
@@ -578,96 +564,102 @@
 
 
 
+          <!-- Responsive table -->
+
           <div
-            class="overflow-hidden rounded-xl border border-slate-200"
+            class="overflow-x-auto rounded-xl border border-slate-200"
           >
 
-            <!-- Table header -->
+            <div class="min-w-[560px]">
 
-            <div
-              class="grid grid-cols-4 bg-slate-100 px-4 py-3 text-xs font-bold uppercase tracking-wide text-slate-500"
-            >
+              <!-- Table header -->
 
-              <span>
-                Dough type
-              </span>
-
-              <span class="text-right">
-                Pans
-              </span>
-
-              <span class="text-right">
-                Dough / pan
-              </span>
-
-              <span class="text-right">
-                Capacity
-              </span>
-
-            </div>
-
-
-
-            <!-- Table rows -->
-
-            <div
-              *ngFor="let row of result"
-              class="grid grid-cols-4 border-t border-slate-100 px-4 py-4 text-sm"
-            >
-
-              <span
-                class="font-semibold text-slate-800"
+              <div
+                class="grid grid-cols-4 gap-2 bg-slate-100 px-4 py-3 text-xs font-bold uppercase tracking-wide text-slate-500 sm:gap-4"
               >
-                {{ row.label }}
-              </span>
+
+                <span>
+                  Dough type
+                </span>
+
+                <span class="text-right">
+                  Pans
+                </span>
+
+                <span class="text-right">
+                  Dough / pan
+                </span>
+
+                <span class="text-right">
+                  Capacity
+                </span>
+
+              </div>
 
 
-              <span
-                class="text-right font-bold text-slate-900"
+
+              <!-- Table rows -->
+
+              <div
+                *ngFor="let row of result"
+                class="grid grid-cols-4 gap-2 border-t border-slate-100 px-4 py-4 text-sm sm:gap-4"
               >
-                {{ row.pans }}
-              </span>
+
+                <span
+                  class="font-semibold text-slate-800"
+                >
+                  {{ row.label }}
+                </span>
 
 
-              <span
-                class="text-right text-slate-500"
+                <span
+                  class="text-right font-bold text-slate-900"
+                >
+                  {{ row.pans }}
+                </span>
+
+
+                <span
+                  class="text-right text-slate-500"
+                >
+                  {{ row.doughPerPan }} g
+                </span>
+
+
+                <span
+                  class="text-right font-bold text-slate-700"
+                >
+                  {{ row.capacityKg | number:'1.0-2' }} kg
+                </span>
+
+              </div>
+
+
+
+              <!-- Total -->
+
+              <div
+                class="grid grid-cols-4 gap-2 border-t-2 border-slate-200 bg-slate-50 px-4 py-4 text-sm font-extrabold sm:gap-4"
               >
-                {{ row.doughPerPan }} g
-              </span>
+
+                <span>
+                  Total
+                </span>
 
 
-              <span
-                class="text-right font-bold text-slate-700"
-              >
-                {{ row.capacityKg | number:'1.0-2' }} kg
-              </span>
-
-            </div>
+                <span class="text-right">
+                  {{ totalPans }}
+                </span>
 
 
-
-            <!-- Total -->
-
-            <div
-              class="grid grid-cols-4 border-t-2 border-slate-200 bg-slate-50 px-4 py-4 text-sm font-extrabold"
-            >
-
-              <span>
-                Total
-              </span>
+                <span></span>
 
 
-              <span class="text-right">
-                {{ totalPans }}
-              </span>
+                <span class="text-right">
+                  {{ totalPanCapacityKg | number:'1.0-2' }} kg
+                </span>
 
-
-              <span></span>
-
-
-              <span class="text-right">
-                {{ totalPanCapacityKg | number:'1.0-2' }} kg
-              </span>
+              </div>
 
             </div>
 
@@ -693,7 +685,7 @@
 
 
           <div
-            class="mt-2 space-y-1 text-sm text-slate-600"
+            class="mt-2 space-y-1 text-sm leading-6 text-slate-600"
           >
 
             <p>
@@ -793,7 +785,7 @@
     <!-- ======================================= -->
 
     <p
-      class="mt-6 text-center text-xs text-slate-400"
+      class="mt-6 text-center text-xs leading-5 text-slate-400"
     >
       Runs entirely in your browser • Angular + Tailwind
       • No API • No database
